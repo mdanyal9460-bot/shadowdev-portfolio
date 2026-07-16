@@ -67,3 +67,48 @@ body {
     height: 100%;
     border: none;
 }
+
+/* 3D Kinetic Text (Depth Layers) */
+.text-3d-kinetic {
+    text-shadow: 
+        1px 1px 0px rgba(0, 243, 255, 0.8),
+        2px 2px 0px rgba(0, 243, 255, 0.6),
+        3px 3px 0px rgba(157, 0, 255, 0.8),
+        4px 4px 0px rgba(157, 0, 255, 0.6),
+        5px 5px 15px rgba(0, 0, 0, 0.8);
+    transition: transform 0.2s ease-out, text-shadow 0.2s ease-out;
+}
+
+/* Hover effect on 3D text (Optional, if combined with Vanilla Tilt, the tilt will handle movement, but let's add a slight shadow stretch) */
+.text-3d-kinetic:hover {
+    text-shadow: 
+        2px 2px 0px rgba(0, 243, 255, 0.9),
+        4px 4px 0px rgba(0, 243, 255, 0.7),
+        6px 6px 0px rgba(157, 0, 255, 0.9),
+        8px 8px 0px rgba(157, 0, 255, 0.7),
+        10px 10px 20px rgba(0, 0, 0, 0.9);
+}
+
+/* Glowing Abstract CSS Orb */
+.glowing-orb {
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,243,255,1) 0%, rgba(157,0,255,1) 50%, rgba(10,10,10,1) 100%);
+    box-shadow: 
+        0 0 50px 10px rgba(0, 243, 255, 0.5),
+        0 0 100px 20px rgba(157, 0, 255, 0.4),
+        inset 0 0 20px rgba(255, 255, 255, 0.5);
+    animation: pulse-orb 4s infinite alternate ease-in-out;
+}
+
+@keyframes pulse-orb {
+    0% { transform: scale(0.95); box-shadow: 0 0 40px rgba(0, 243, 255, 0.4), 0 0 80px rgba(157, 0, 255, 0.3); }
+    100% { transform: scale(1.05); box-shadow: 0 0 70px rgba(0, 243, 255, 0.7), 0 0 120px rgba(157, 0, 255, 0.6); }
+}
+
+/* GSAP Initial States (to prevent flash before animation) */
+.gsap-reveal {
+    opacity: 0;
+    visibility: hidden;
+}

@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>shadowdev_x | Premium Web Architect</title>
     <script type="module" src="https://unpkg.com/@splinetool/viewer@1.12.98/build/spline-viewer.js"></script>
+    
+    <!-- GSAP & ScrollTrigger CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
     <!-- Tailwind CDN with Custom Config Injection -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -25,7 +30,7 @@
 <body class="bg-darkBase text-white antialiased selection:bg-neonBlue selection:text-darkBase">
 
     <!-- Navbar -->
-    <nav class="fixed w-full z-50 glass px-6 py-4 flex justify-between items-center">
+    <nav class="fixed w-full z-50 glass px-6 py-4 flex justify-between items-center gsap-fade-down">
         <div class="text-2xl font-bold tracking-tighter">shadowdev<span class="text-neonBlue">_x</span></div>
         <div class="hidden md:flex space-x-8 text-sm font-semibold tracking-wide text-gray-400">
             <a href="#work" class="hover:text-neonBlue transition-colors duration-300 inline-block" data-tilt data-tilt-scale="1.1" data-tilt-max="15">Work</a>
@@ -38,20 +43,23 @@
     <!-- Hero Section -->
     <section class="relative min-h-screen flex items-center justify-center pt-20 px-6 lg:px-20 overflow-hidden">
         <!-- Abstract Background Glows -->
-        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-neonBlue/20 rounded-full blur-[120px] pointer-events-none"></div>
-        <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-neonPurple/20 rounded-full blur-[120px] pointer-events-none"></div>
+        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-neonBlue/20 rounded-full blur-[120px] pointer-events-none gsap-pulse"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-neonPurple/20 rounded-full blur-[120px] pointer-events-none gsap-pulse"></div>
 
         <div class="container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center z-10">
             <div class="space-y-8">
-                <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight leading-tight">
-                    Architecting <br>
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-neonBlue to-neonPurple glow-text-blue">Premium</span> <br>
-                    Digital Realities.
-                </h1>
-                <p class="text-lg md:text-xl text-gray-400 max-w-lg">
+                <!-- 3D Kinetic Text with Vanilla Tilt -->
+                <div class="inline-block" data-tilt data-tilt-max="5" data-tilt-speed="400" data-tilt-perspective="500">
+                    <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight leading-tight text-3d-kinetic gsap-hero-text">
+                        Architecting <br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-neonBlue to-neonPurple">Premium</span> <br>
+                        Digital Realities.
+                    </h1>
+                </div>
+                <p class="text-lg md:text-xl text-gray-400 max-w-lg gsap-hero-text">
                     I'm <span class="text-white font-semibold">shadowdev_x</span>. Crafting ultra-modern, high-converting premium landing pages that turn visitors into clients.
                 </p>
-                <div class="flex gap-4">
+                <div class="flex gap-4 gsap-hero-text">
                     <a href="https://fiverr.com/" target="_blank" class="inline-flex items-center justify-center px-8 py-4 text-darkBase bg-neonBlue font-bold rounded-lg btn-neon text-lg" data-tilt data-tilt-scale="1.05" data-tilt-max="10">
                         Hire Me on Fiverr
                     </a>
@@ -62,10 +70,33 @@
             </div>
 
             <!-- 3D Spline Container -->
-            <div class="relative w-full h-[500px] lg:h-[700px] rounded-2xl overflow-hidden glass border border-white/5 shadow-2xl">
-                <!-- Replace src with your actual Spline export link when you're ready -->
+            <div class="relative w-full h-[500px] lg:h-[700px] rounded-2xl overflow-hidden glass border border-white/5 shadow-2xl gsap-hero-spline">
                 <spline-viewer url="https://prod.spline.design/mMfxZZ4N-rT9RqH8/scene.splinecode"></spline-viewer>
                 <div class="absolute inset-0 pointer-events-none shadow-[inset_0_0_50px_rgba(10,10,10,0.8)] rounded-2xl"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEW SECTION: The Origin Story -->
+    <section id="origin" class="py-24 px-6 lg:px-20 relative overflow-hidden">
+        <div class="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+            <!-- Column 1: Abstract Glowing Orb -->
+            <div class="flex justify-center items-center gsap-reveal-left">
+                <div class="glowing-orb"></div>
+            </div>
+            
+            <!-- Column 2: The Copy -->
+            <div class="space-y-6 gsap-reveal-right">
+                <h2 class="text-4xl md:text-5xl font-bold text-3d-kinetic mb-4">The <span class="text-neonPurple glow-text-purple">Genesis</span></h2>
+                <p class="text-xl leading-relaxed text-gray-300">
+                    I am not your average developer. I'm a 10th-grade mastermind architecting premium digital realities.
+                </p>
+                <p class="text-lg leading-relaxed text-gray-400">
+                    Balancing the grind of real-world business strategy with the matrix of web development, I build experiences that dominate.
+                </p>
+                <p class="text-2xl font-bold text-white mt-8 italic">
+                    Welcome to my dimension.
+                </p>
             </div>
         </div>
     </section>
@@ -73,11 +104,11 @@
     <!-- My Work / Portfolio Grid -->
     <section id="work" class="py-24 px-6 lg:px-20 relative">
         <div class="container mx-auto">
-            <h2 class="text-4xl font-bold mb-16 text-center">Featured <span class="text-neonPurple glow-text-purple">Projects</span></h2>
+            <h2 class="text-4xl font-bold mb-16 text-center text-3d-kinetic gsap-reveal-up">Featured <span class="text-neonPurple glow-text-purple">Projects</span></h2>
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <!-- Card 1 -->
-                <div class="glass p-6 rounded-2xl group hover:-translate-y-2 transition-all duration-300" data-tilt data-tilt-max="10" data-tilt-speed="400" data-tilt-perspective="1000" data-tilt-scale="1.05" data-tilt-glare="true" data-tilt-max-glare="0.2">
+                <div class="portfolio-card glass p-6 rounded-2xl group hover:-translate-y-2 transition-all duration-300 opacity-0 translate-y-10" data-tilt data-tilt-max="10" data-tilt-speed="400" data-tilt-perspective="1000" data-tilt-scale="1.05" data-tilt-glare="true" data-tilt-max-glare="0.2">
                     <div class="w-full h-48 bg-gradient-to-br from-gray-800 to-black rounded-xl mb-6 overflow-hidden relative">
                         <div class="absolute inset-0 bg-neonBlue/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 mix-blend-overlay"></div>
                     </div>
@@ -87,7 +118,7 @@
                 </div>
 
                 <!-- Card 2 -->
-                <div class="glass p-6 rounded-2xl group hover:-translate-y-2 transition-all duration-300" data-tilt data-tilt-max="10" data-tilt-speed="400" data-tilt-perspective="1000" data-tilt-scale="1.05" data-tilt-glare="true" data-tilt-max-glare="0.2">
+                <div class="portfolio-card glass p-6 rounded-2xl group hover:-translate-y-2 transition-all duration-300 opacity-0 translate-y-10" data-tilt data-tilt-max="10" data-tilt-speed="400" data-tilt-perspective="1000" data-tilt-scale="1.05" data-tilt-glare="true" data-tilt-max-glare="0.2">
                     <div class="w-full h-48 bg-gradient-to-br from-gray-800 to-black rounded-xl mb-6 overflow-hidden relative">
                         <div class="absolute inset-0 bg-neonPurple/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 mix-blend-overlay"></div>
                     </div>
@@ -97,7 +128,7 @@
                 </div>
 
                 <!-- Card 3 -->
-                <div class="glass p-6 rounded-2xl group hover:-translate-y-2 transition-all duration-300" data-tilt data-tilt-max="10" data-tilt-speed="400" data-tilt-perspective="1000" data-tilt-scale="1.05" data-tilt-glare="true" data-tilt-max-glare="0.2">
+                <div class="portfolio-card glass p-6 rounded-2xl group hover:-translate-y-2 transition-all duration-300 opacity-0 translate-y-10" data-tilt data-tilt-max="10" data-tilt-speed="400" data-tilt-perspective="1000" data-tilt-scale="1.05" data-tilt-glare="true" data-tilt-max-glare="0.2">
                     <div class="w-full h-48 bg-gradient-to-br from-gray-800 to-black rounded-xl mb-6 overflow-hidden relative">
                         <div class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 mix-blend-overlay"></div>
                     </div>
@@ -110,8 +141,8 @@
     </section>
 
     <!-- Tech Stack -->
-    <section id="stack" class="py-16 border-y border-white/5 bg-black/50">
-        <div class="container mx-auto px-6">
+    <section id="stack" class="py-16 border-y border-white/5 bg-black/50 overflow-hidden">
+        <div class="container mx-auto px-6 gsap-reveal-up">
             <p class="text-center text-sm font-bold tracking-widest text-gray-500 uppercase mb-8">Technologies I Command</p>
             <div class="flex flex-wrap justify-center items-center gap-12 opacity-70 grayscale hover:grayscale-0 transition-all duration-500">
                 <div class="text-2xl font-black">HTML5</div>
@@ -119,14 +150,15 @@
                 <div class="text-2xl font-black">JavaScript</div>
                 <div class="text-2xl font-black text-neonPurple">Spline 3D</div>
                 <div class="text-2xl font-black">React</div>
+                <div class="text-2xl font-black text-neonBlue">GSAP</div>
             </div>
         </div>
     </section>
 
     <!-- Contact Portal -->
-    <section id="contact" class="py-24 px-6 lg:px-20 relative">
-        <div class="container mx-auto max-w-4xl glass p-8 md:p-16 rounded-3xl text-center border border-neonBlue/20 shadow-[0_0_50px_rgba(0,243,255,0.05)]">
-            <h2 class="text-4xl md:text-5xl font-bold mb-6">Ready to <span class="text-neonBlue glow-text-blue">Elevate</span> Your Brand?</h2>
+    <section id="contact" class="py-24 px-6 lg:px-20 relative overflow-hidden">
+        <div class="container mx-auto max-w-4xl glass p-8 md:p-16 rounded-3xl text-center border border-neonBlue/20 shadow-[0_0_50px_rgba(0,243,255,0.05)] gsap-reveal-up">
+            <h2 class="text-4xl md:text-5xl font-bold mb-6 text-3d-kinetic">Ready to <span class="text-neonBlue glow-text-blue">Elevate</span> Your Brand?</h2>
             <p class="text-gray-400 mb-10 max-w-xl mx-auto">Stop settling for basic templates. Let's build a premium digital experience that commands attention and crushes your competition.</p>
             
             <div id="form-response" class="hidden max-w-md mx-auto p-6 glass rounded-2xl border border-neonBlue/50 text-neonBlue font-bold text-lg mb-8">
@@ -160,8 +192,98 @@
     <!-- Vanilla Tilt Script -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
     
-    <!-- Contact Form Logic -->
+    <!-- GSAP & Web3Forms Logic -->
     <script>
+        // --- GSAP ANIMATIONS ---
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Navbar Fade Down
+        gsap.from(".gsap-fade-down", {
+            y: -50,
+            opacity: 0,
+            duration: 1,
+            ease: "power3.out"
+        });
+
+        // Hero Section Elements
+        gsap.from(".gsap-hero-text", {
+            y: 30,
+            opacity: 0,
+            duration: 1,
+            stagger: 0.2,
+            ease: "power3.out",
+            delay: 0.2
+        });
+        
+        gsap.from(".gsap-hero-spline", {
+            scale: 0.9,
+            opacity: 0,
+            duration: 1.5,
+            ease: "power3.out",
+            delay: 0.5
+        });
+
+        // Background Pulse
+        gsap.to(".gsap-pulse", {
+            scale: 1.1,
+            opacity: 0.7,
+            duration: 4,
+            repeat: -1,
+            yoyo: true,
+            ease: "sine.inOut"
+        });
+
+        // Generic Reveal Up
+        gsap.utils.toArray('.gsap-reveal-up').forEach(elem => {
+            gsap.from(elem, {
+                scrollTrigger: {
+                    trigger: elem,
+                    start: "top 85%",
+                },
+                y: 50,
+                opacity: 0,
+                duration: 1,
+                ease: "power3.out"
+            });
+        });
+
+        // Origin Story Reveals
+        gsap.from(".gsap-reveal-left", {
+            scrollTrigger: {
+                trigger: "#origin",
+                start: "top 80%",
+            },
+            x: -100,
+            opacity: 0,
+            duration: 1.2,
+            ease: "power3.out"
+        });
+
+        gsap.from(".gsap-reveal-right", {
+            scrollTrigger: {
+                trigger: "#origin",
+                start: "top 80%",
+            },
+            x: 100,
+            opacity: 0,
+            duration: 1.2,
+            ease: "power3.out"
+        });
+
+        // Staggered Portfolio Cards
+        gsap.to(".portfolio-card", {
+            scrollTrigger: {
+                trigger: "#work",
+                start: "top 75%",
+            },
+            y: 0,
+            opacity: 1,
+            duration: 0.8,
+            stagger: 0.2,
+            ease: "back.out(1.7)"
+        });
+
+
         // --- WEB3FORMS CONFIGURATION ---
         // Boss, paste your Access Key (UUID) here:
         const WEB3FORMS_KEY = "003136b4-e57f-4ecb-82aa-08d93021d57e"; 
@@ -198,6 +320,9 @@
                         // State: Success
                         contactForm.classList.add('hidden');
                         formResponse.classList.remove('hidden');
+                        
+                        // Small GSAP pop for the success message
+                        gsap.from(formResponse, {scale: 0.8, opacity: 0, duration: 0.5, ease: "back.out(1.7)"});
                     } else {
                         // State: Error from Web3Forms API
                         throw new Error(data.message || 'Transmission Failed');
