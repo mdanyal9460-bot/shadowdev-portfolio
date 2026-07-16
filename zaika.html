@@ -18,9 +18,10 @@
             theme: {
                 extend: {
                     colors: {
-                        darkBase: '#0a0a0a',
+                        velvetAbyss: '#050509',
                         neonBlue: '#00f3ff',
-                        neonOrange: '#ff7300', /* Amber/Orange for Food Vibe */
+                        neonOrange: '#ff7300', 
+                        softAmber: '#ffaa00'
                     },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
@@ -34,91 +35,134 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
 
         body {
-            background-color: #0a0a0a;
+            background-color: #050509;
             color: #ffffff;
             overflow-x: hidden;
+            perspective: 1000px;
         }
+
+        /* Fluid Ambient Orbs */
+        .ambient-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(150px);
+            opacity: 0.3;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .orb-1 { width: 50vw; height: 50vw; background: #ff7300; top: -10%; left: -10%; }
+        .orb-2 { width: 40vw; height: 40vw; background: #00f3ff; bottom: -10%; right: -10%; }
+        .orb-3 { width: 30vw; height: 30vw; background: #ffaa00; top: 40%; left: 30%; opacity: 0.2; }
 
         /* Glassmorphism Utility */
         .glass {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
         }
 
-        /* Neon Glow Animations */
-        .glow-text-orange {
-            text-shadow: 0 0 10px rgba(255, 115, 0, 0.5), 0 0 20px rgba(255, 115, 0, 0.3);
-        }
-        
-        .glow-text-blue {
-            text-shadow: 0 0 10px rgba(0, 243, 255, 0.5), 0 0 20px rgba(0, 243, 255, 0.3);
-        }
-
+        /* Buttons */
         .btn-neon-orange {
             position: relative;
             transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(255, 115, 0, 0.3);
         }
-
-        .btn-neon-orange::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            border-radius: inherit;
-            box-shadow: 0 0 15px rgba(255, 115, 0, 0.4);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
         .btn-neon-orange:hover {
             transform: translateY(-2px);
-            box-shadow: 0 0 20px rgba(255, 115, 0, 0.6);
+            box-shadow: 0 0 25px rgba(255, 115, 0, 0.6);
         }
 
-        .btn-neon-orange:hover::before {
-            opacity: 1;
+        /* High-Fidelity 3D Typography */
+        .text-3d-layered {
+            position: relative;
+            transform-style: preserve-3d;
+            display: inline-block;
+            color: #ffffff;
+        }
+        .text-3d-layered::before,
+        .text-3d-layered::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        .text-3d-layered::before {
+            color: #ffaa00; /* Soft Amber */
+            transform: translateZ(-10px);
+            opacity: 0.8;
+            filter: blur(2px);
+        }
+        .text-3d-layered::after {
+            color: rgba(0, 243, 255, 0.5); /* Deep Shadow/Cyan base */
+            transform: translateZ(-20px);
+            opacity: 0.5;
+            filter: blur(6px);
         }
 
-        /* 3D Kinetic Text (Depth Layers for Orange/Blue) */
-        .text-3d-kinetic {
-            text-shadow: 
-                1px 1px 0px rgba(255, 115, 0, 0.8),
-                2px 2px 0px rgba(255, 115, 0, 0.6),
-                3px 3px 0px rgba(0, 243, 255, 0.8),
-                4px 4px 0px rgba(0, 243, 255, 0.6),
-                5px 5px 15px rgba(0, 0, 0, 0.8);
-            transition: transform 0.2s ease-out, text-shadow 0.2s ease-out;
+        /* Physical 3D Menu Cubes */
+        .cube-card {
+            transform-style: preserve-3d;
+            perspective: 1000px;
         }
+        .cube-inner {
+            transform-style: preserve-3d;
+            transition: transform 0.1s;
+        }
+        
+        /* Floating Food Item */
+        .food-layer {
+            transform: translateZ(60px);
+            transition: transform 0.3s ease;
+        }
+        
+        .food-layer-content {
+            /* Independent rotation animation for the food item */
+            animation: float-rotate 8s infinite linear;
+        }
+
+        @keyframes float-rotate {
+            0% { transform: translateY(0px) rotate(0deg); }
+            25% { transform: translateY(-5px) rotate(5deg); }
+            50% { transform: translateY(0px) rotate(0deg); }
+            75% { transform: translateY(5px) rotate(-5deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
     </style>
 </head>
-<body class="bg-darkBase text-white antialiased selection:bg-neonOrange selection:text-darkBase">
+<body class="bg-velvetAbyss text-white antialiased selection:bg-neonOrange selection:text-velvetAbyss">
+
+    <!-- Fluid Ambient Orbs -->
+    <div class="ambient-orb orb-1"></div>
+    <div class="ambient-orb orb-2"></div>
+    <div class="ambient-orb orb-3"></div>
 
     <!-- Navbar -->
     <nav class="fixed w-full z-50 glass px-6 py-4 flex justify-between items-center gsap-fade-down">
-        <div class="text-2xl font-bold tracking-tighter">Zaika<span class="text-neonOrange">-e-</span>Sargodha</div>
+        <div class="text-2xl font-bold tracking-tighter" data-tilt data-tilt-scale="1.05">Zaika<span class="text-neonOrange">-e-</span>Sargodha</div>
         <div class="hidden md:flex space-x-8 text-sm font-semibold tracking-wide text-gray-400">
             <a href="#menu" class="hover:text-neonOrange transition-colors duration-300 inline-block" data-tilt data-tilt-scale="1.1" data-tilt-max="15">Menu</a>
             <a href="#about" class="hover:text-neonOrange transition-colors duration-300 inline-block" data-tilt data-tilt-scale="1.1" data-tilt-max="15">Our Story</a>
-            <a href="#order" class="hover:text-neonOrange transition-colors duration-300 inline-block" data-tilt data-tilt-scale="1.1" data-tilt-max="15">Order Now</a>
+            <a href="index.html" class="hover:text-neonBlue transition-colors duration-300 inline-block" data-tilt data-tilt-scale="1.1" data-tilt-max="15">Return to Grid</a>
         </div>
-        <a href="#menu" class="bg-neonOrange text-darkBase px-5 py-2 rounded-full font-bold btn-neon-orange text-sm" data-tilt data-tilt-scale="1.05" data-tilt-max="10">Explore Menu</a>
+        <a href="#menu" class="bg-neonOrange text-velvetAbyss px-5 py-2 rounded-full font-bold btn-neon-orange text-sm" data-tilt data-tilt-scale="1.05" data-tilt-max="10">Explore Menu</a>
     </nav>
 
     <!-- Hero Section -->
     <section class="relative min-h-screen flex items-center justify-center pt-20 px-6 lg:px-20 overflow-hidden">
-        <!-- Abstract Background Glows -->
-        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-neonOrange/20 rounded-full blur-[120px] pointer-events-none gsap-pulse"></div>
-        <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-neonBlue/10 rounded-full blur-[120px] pointer-events-none gsap-pulse"></div>
-
         <div class="container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center z-10">
             <div class="space-y-8">
-                <!-- 3D Kinetic Text with Vanilla Tilt -->
-                <div class="inline-block" data-tilt data-tilt-max="5" data-tilt-speed="400" data-tilt-perspective="500">
-                    <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight leading-tight text-3d-kinetic gsap-hero-text">
+                <!-- High-Fidelity 3D Typography with Vanilla Tilt on Text -->
+                <div class="inline-block" data-tilt data-tilt-max="10" data-tilt-speed="400" data-tilt-perspective="500">
+                    <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight leading-tight gsap-hero-text text-3d-layered" data-text="Craving Premium Flavors? Welcome to Zaika.">
                         Craving <br>
-                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-neonOrange to-neonBlue">Premium Flavors?</span> <br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-neonOrange to-softAmber">Premium Flavors?</span> <br>
                         Welcome to Zaika.
                     </h1>
                 </div>
@@ -126,97 +170,136 @@
                     Experience the pinnacle of culinary architecture. Authentic spices, slow-cooked perfection, delivered straight to your reality.
                 </p>
                 <div class="flex gap-4 gsap-hero-text">
-                    <a href="#menu" class="inline-flex items-center justify-center px-8 py-4 text-darkBase bg-neonOrange font-bold rounded-lg btn-neon-orange text-lg" data-tilt data-tilt-scale="1.05" data-tilt-max="10">
+                    <a href="#menu" class="inline-flex items-center justify-center px-8 py-4 text-velvetAbyss bg-neonOrange font-bold rounded-lg btn-neon-orange text-lg" data-tilt data-tilt-scale="1.05" data-tilt-max="10">
                         Explore Menu
-                    </a>
-                    <a href="#order" class="inline-flex items-center justify-center px-8 py-4 text-white glass hover:bg-white/5 transition duration-300 rounded-lg font-bold text-lg border border-white/10" data-tilt data-tilt-scale="1.05" data-tilt-max="10">
-                        Order Now
                     </a>
                 </div>
             </div>
 
             <!-- 3D Asset Placeholder -->
-            <div class="relative w-full h-[400px] lg:h-[600px] rounded-full overflow-hidden glass border border-neonOrange/20 shadow-[0_0_50px_rgba(255,115,0,0.1)] gsap-hero-spline flex items-center justify-center">
-                <div class="text-center p-8">
-                    <div class="w-32 h-32 mx-auto border-4 border-neonOrange border-dashed rounded-full animate-spin-slow mb-4 opacity-50"></div>
-                    <p class="text-gray-400 font-semibold tracking-widest">[ 3D PREMIUM FOOD ASSET INTEGRATION PENDING ]</p>
+            <div class="relative w-full h-[400px] lg:h-[600px] rounded-full overflow-hidden glass border border-neonOrange/20 shadow-[0_0_80px_rgba(255,115,0,0.15)] gsap-hero-spline flex items-center justify-center" data-tilt data-tilt-max="5" data-tilt-perspective="1000">
+                <div class="text-center p-8 transform-style-preserve-3d" style="transform: translateZ(50px);">
+                    <div class="w-32 h-32 mx-auto border-4 border-neonOrange border-dashed rounded-full animate-spin-slow mb-4 opacity-70"></div>
+                    <p class="text-neonOrange font-semibold tracking-widest glow-text-orange">[ 3D PREMIUM FOOD ASSET ]</p>
                 </div>
-                <div class="absolute inset-0 pointer-events-none shadow-[inset_0_0_80px_rgba(10,10,10,0.9)] rounded-full"></div>
+                <div class="absolute inset-0 pointer-events-none shadow-[inset_0_0_100px_rgba(5,5,9,0.9)] rounded-full"></div>
             </div>
         </div>
     </section>
 
     <!-- The Premium Menu Grid -->
-    <section id="menu" class="py-24 px-6 lg:px-20 relative">
+    <section id="menu" class="py-24 px-6 lg:px-20 relative z-10">
         <div class="container mx-auto">
-            <h2 class="text-4xl font-bold mb-16 text-center text-3d-kinetic gsap-reveal-up">Featured <span class="text-neonOrange glow-text-orange">Dishes</span></h2>
+            <div class="text-center mb-20" data-tilt data-tilt-max="5" data-tilt-speed="400" data-tilt-perspective="500">
+                <h2 class="text-5xl font-bold text-3d-layered gsap-reveal-up" data-text="Featured Dishes">
+                    Featured <span class="text-neonOrange">Dishes</span>
+                </h2>
+            </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Menu Item 1 -->
-                <div class="menu-card glass p-6 rounded-2xl group hover:-translate-y-2 transition-all duration-300 opacity-0 translate-y-10" data-tilt data-tilt-max="8" data-tilt-speed="400" data-tilt-perspective="1000" data-tilt-scale="1.05" data-tilt-glare="true" data-tilt-max-glare="0.15">
-                    <div class="w-full h-56 bg-gradient-to-br from-gray-900 to-black rounded-xl mb-6 overflow-hidden relative flex flex-col justify-between p-4 border border-white/5">
-                        <div class="absolute inset-0 bg-neonOrange/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 mix-blend-overlay"></div>
-                        <div class="flex justify-between items-start z-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+                <!-- Menu Item 1: Physical 3D Cube -->
+                <div class="cube-card menu-card gsap-reveal-up" data-tilt data-tilt-max="15" data-tilt-speed="400" data-tilt-perspective="1000" data-tilt-scale="1.05" data-tilt-glare="true" data-tilt-max-glare="0.2">
+                    <div class="cube-inner glass p-8 rounded-3xl h-full flex flex-col border border-white/5 bg-gradient-to-br from-velvetAbyss to-black relative overflow-hidden group">
+                        
+                        <!-- Internal Glow overlay -->
+                        <div class="absolute inset-0 bg-neonOrange/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+                        
+                        <div class="flex justify-between items-start z-10 mb-8" style="transform: translateZ(20px);">
                             <span class="bg-neonOrange/20 text-neonOrange px-3 py-1 rounded-full text-xs font-bold border border-neonOrange/30">Chef's Special</span>
-                            <span class="text-white font-bold text-lg">Rs. 450</span>
+                            <span class="text-white font-bold text-xl drop-shadow-md">Rs. 450</span>
                         </div>
-                        <!-- Placeholder for food image -->
-                        <div class="w-24 h-24 mx-auto bg-gray-800 rounded-full border-2 border-dashed border-gray-600 group-hover:border-neonOrange transition-colors z-10 mt-2"></div>
+                        
+                        <!-- Floating Food Asset Layer (Independent Physical Layer) -->
+                        <div class="food-layer flex-grow flex items-center justify-center mb-8">
+                            <div class="food-layer-content w-32 h-32 rounded-full border border-neonOrange bg-black/50 shadow-[0_0_30px_rgba(255,115,0,0.3)] flex items-center justify-center">
+                                <span class="text-xs text-neonOrange font-mono">[ Biryani ]</span>
+                            </div>
+                        </div>
+
+                        <div class="z-10" style="transform: translateZ(30px);">
+                            <h3 class="text-2xl font-bold mb-2">Premium Biryani</h3>
+                            <p class="text-gray-400 text-sm mb-6 h-12">Aromatic basmati rice cooked with tender meat and our secret blend of Sargodha spices.</p>
+                            <button class="w-full bg-white/5 hover:bg-neonOrange text-white hover:text-velvetAbyss font-bold py-3 rounded-xl transition-all duration-300 border border-white/10 group-hover:border-neonOrange shadow-lg">
+                                Add to Order +
+                            </button>
+                        </div>
                     </div>
-                    <h3 class="text-2xl font-bold mb-2">Premium Biryani Plate</h3>
-                    <p class="text-gray-400 text-sm mb-6 h-10">Aromatic basmati rice cooked with tender meat and our secret blend of Sargodha spices.</p>
-                    <button class="w-full bg-white/5 hover:bg-neonOrange text-white hover:text-darkBase font-semibold py-3 rounded-lg transition-colors duration-300 border border-white/10 group-hover:border-neonOrange">
-                        Add to Order +
-                    </button>
                 </div>
 
-                <!-- Menu Item 2 -->
-                <div class="menu-card glass p-6 rounded-2xl group hover:-translate-y-2 transition-all duration-300 opacity-0 translate-y-10" data-tilt data-tilt-max="8" data-tilt-speed="400" data-tilt-perspective="1000" data-tilt-scale="1.05" data-tilt-glare="true" data-tilt-max-glare="0.15">
-                    <div class="w-full h-56 bg-gradient-to-br from-gray-900 to-black rounded-xl mb-6 overflow-hidden relative flex flex-col justify-between p-4 border border-white/5">
-                        <div class="absolute inset-0 bg-neonBlue/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 mix-blend-overlay"></div>
-                        <div class="flex justify-between items-start z-10">
+                <!-- Menu Item 2: Physical 3D Cube -->
+                <div class="cube-card menu-card gsap-reveal-up" data-tilt data-tilt-max="15" data-tilt-speed="400" data-tilt-perspective="1000" data-tilt-scale="1.05" data-tilt-glare="true" data-tilt-max-glare="0.2">
+                    <div class="cube-inner glass p-8 rounded-3xl h-full flex flex-col border border-white/5 bg-gradient-to-br from-velvetAbyss to-black relative overflow-hidden group">
+                        
+                        <!-- Internal Glow overlay -->
+                        <div class="absolute inset-0 bg-neonBlue/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+                        
+                        <div class="flex justify-between items-start z-10 mb-8" style="transform: translateZ(20px);">
                             <span class="bg-neonBlue/20 text-neonBlue px-3 py-1 rounded-full text-xs font-bold border border-neonBlue/30">Classic</span>
-                            <span class="text-white font-bold text-lg">Rs. 250</span>
+                            <span class="text-white font-bold text-xl drop-shadow-md">Rs. 250</span>
                         </div>
-                        <!-- Placeholder for food image -->
-                        <div class="w-24 h-24 mx-auto bg-gray-800 rounded-full border-2 border-dashed border-gray-600 group-hover:border-neonBlue transition-colors z-10 mt-2"></div>
+                        
+                        <!-- Floating Food Asset Layer -->
+                        <div class="food-layer flex-grow flex items-center justify-center mb-8">
+                            <div class="food-layer-content w-32 h-32 rounded-full border border-neonBlue bg-black/50 shadow-[0_0_30px_rgba(0,243,255,0.3)] flex items-center justify-center" style="animation-delay: -2s;">
+                                <span class="text-xs text-neonBlue font-mono">[ Daal Swirl ]</span>
+                            </div>
+                        </div>
+
+                        <div class="z-10" style="transform: translateZ(30px);">
+                            <h3 class="text-2xl font-bold mb-2">Special Daal Moong</h3>
+                            <p class="text-gray-400 text-sm mb-6 h-12">A rich, creamy lentil fusion tempered with garlic, cumin, and pure desi ghee.</p>
+                            <button class="w-full bg-white/5 hover:bg-neonBlue text-white hover:text-velvetAbyss font-bold py-3 rounded-xl transition-all duration-300 border border-white/10 group-hover:border-neonBlue shadow-lg">
+                                Add to Order +
+                            </button>
+                        </div>
                     </div>
-                    <h3 class="text-2xl font-bold mb-2">Special Daal Moong & Masri</h3>
-                    <p class="text-gray-400 text-sm mb-6 h-10">A rich, creamy lentil fusion tempered with garlic, cumin, and pure desi ghee.</p>
-                    <button class="w-full bg-white/5 hover:bg-neonBlue text-white hover:text-darkBase font-semibold py-3 rounded-lg transition-colors duration-300 border border-white/10 group-hover:border-neonBlue">
-                        Add to Order +
-                    </button>
                 </div>
 
-                <!-- Menu Item 3 -->
-                <div class="menu-card glass p-6 rounded-2xl group hover:-translate-y-2 transition-all duration-300 opacity-0 translate-y-10" data-tilt data-tilt-max="8" data-tilt-speed="400" data-tilt-perspective="1000" data-tilt-scale="1.05" data-tilt-glare="true" data-tilt-max-glare="0.15">
-                    <div class="w-full h-56 bg-gradient-to-br from-gray-900 to-black rounded-xl mb-6 overflow-hidden relative flex flex-col justify-between p-4 border border-white/5">
-                        <div class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 mix-blend-overlay"></div>
-                        <div class="flex justify-between items-start z-10">
-                            <span class="bg-white/10 text-white px-3 py-1 rounded-full text-xs font-bold border border-white/20">Signature</span>
-                            <span class="text-white font-bold text-lg">Rs. 850</span>
+                <!-- Menu Item 3: Physical 3D Cube -->
+                <div class="cube-card menu-card gsap-reveal-up" data-tilt data-tilt-max="15" data-tilt-speed="400" data-tilt-perspective="1000" data-tilt-scale="1.05" data-tilt-glare="true" data-tilt-max-glare="0.2">
+                    <div class="cube-inner glass p-8 rounded-3xl h-full flex flex-col border border-white/5 bg-gradient-to-br from-velvetAbyss to-black relative overflow-hidden group">
+                        
+                        <!-- Internal Glow overlay -->
+                        <div class="absolute inset-0 bg-softAmber/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+                        
+                        <div class="flex justify-between items-start z-10 mb-8" style="transform: translateZ(20px);">
+                            <span class="bg-softAmber/20 text-softAmber px-3 py-1 rounded-full text-xs font-bold border border-softAmber/30">Signature</span>
+                            <span class="text-white font-bold text-xl drop-shadow-md">Rs. 850</span>
                         </div>
-                        <!-- Placeholder for food image -->
-                        <div class="w-24 h-24 mx-auto bg-gray-800 rounded-full border-2 border-dashed border-gray-600 group-hover:border-white transition-colors z-10 mt-2"></div>
+                        
+                        <!-- Floating Food Asset Layer -->
+                        <div class="food-layer flex-grow flex items-center justify-center mb-8">
+                            <div class="food-layer-content w-32 h-32 rounded-full border border-softAmber bg-black/50 shadow-[0_0_30px_rgba(255,170,0,0.3)] flex items-center justify-center" style="animation-delay: -4s;">
+                                <span class="text-xs text-softAmber font-mono">[ Karahi ]</span>
+                            </div>
+                        </div>
+
+                        <div class="z-10" style="transform: translateZ(30px);">
+                            <h3 class="text-2xl font-bold mb-2">Classic Chicken Karahi</h3>
+                            <p class="text-gray-400 text-sm mb-6 h-12">Wok-tossed chicken in a robust tomato and green chili base, finished with fresh coriander.</p>
+                            <button class="w-full bg-white/5 hover:bg-softAmber text-white hover:text-velvetAbyss font-bold py-3 rounded-xl transition-all duration-300 border border-white/10 group-hover:border-softAmber shadow-lg">
+                                Add to Order +
+                            </button>
+                        </div>
                     </div>
-                    <h3 class="text-2xl font-bold mb-2">Classic Chicken Karahi</h3>
-                    <p class="text-gray-400 text-sm mb-6 h-10">Wok-tossed chicken in a robust tomato and green chili base, finished with fresh coriander.</p>
-                    <button class="w-full bg-white/5 hover:bg-white text-white hover:text-darkBase font-semibold py-3 rounded-lg transition-colors duration-300 border border-white/10 group-hover:border-white">
-                        Add to Order +
-                    </button>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="text-center py-8 text-gray-600 text-sm border-t border-white/5 mt-12 bg-black/50">
+    <footer class="text-center py-8 text-gray-600 text-sm border-t border-white/5 mt-24 glass">
         <p>© 2026 Zaika-e-Sargodha. Engineered by <span class="text-neonBlue font-semibold">shadowdev_x</span>.</p>
     </footer>
     
     <!-- GSAP Script Logic -->
     <script>
         gsap.registerPlugin(ScrollTrigger);
+
+        // Fluid Ambient Orbs Animation
+        gsap.to(".orb-1", { x: "20vw", y: "10vh", duration: 15, repeat: -1, yoyo: true, ease: "sine.inOut" });
+        gsap.to(".orb-2", { x: "-20vw", y: "-15vh", duration: 18, repeat: -1, yoyo: true, ease: "sine.inOut", delay: 1 });
+        gsap.to(".orb-3", { x: "10vw", y: "20vh", duration: 12, repeat: -1, yoyo: true, ease: "sine.inOut", delay: 2 });
 
         // Navbar Animation
         gsap.from(".gsap-fade-down", {
@@ -228,59 +311,39 @@
 
         // Hero Elements Stagger
         gsap.from(".gsap-hero-text", {
-            y: 30,
+            y: 40,
             opacity: 0,
-            duration: 1,
+            duration: 1.2,
             stagger: 0.2,
             ease: "power3.out",
             delay: 0.2
         });
         
-        // 3D Placeholder Spin/Fade
+        // 3D Placeholder Drop In
         gsap.from(".gsap-hero-spline", {
-            scale: 0.9,
+            scale: 0.8,
+            y: 100,
             opacity: 0,
-            rotation: -5,
+            rotationX: 20,
             duration: 1.5,
             ease: "power3.out",
             delay: 0.5
         });
 
-        // Background Pulse Effect
-        gsap.to(".gsap-pulse", {
-            scale: 1.05,
-            opacity: 0.8,
-            duration: 4,
-            repeat: -1,
-            yoyo: true,
-            ease: "sine.inOut"
-        });
-
-        // Generic Section Title Reveal
-        gsap.utils.toArray('.gsap-reveal-up').forEach(elem => {
-            gsap.from(elem, {
-                scrollTrigger: {
-                    trigger: elem,
-                    start: "top 85%",
-                },
-                y: 50,
-                opacity: 0,
-                duration: 1,
-                ease: "power3.out"
-            });
-        });
-
         // Menu Cards Staggered Reveal
-        gsap.to(".menu-card", {
-            scrollTrigger: {
-                trigger: "#menu",
-                start: "top 75%",
-            },
-            y: 0,
-            opacity: 1,
-            duration: 0.8,
-            stagger: 0.2,
-            ease: "back.out(1.5)"
+        gsap.utils.toArray(".menu-card").forEach((card, i) => {
+            gsap.from(card, {
+                scrollTrigger: {
+                    trigger: "#menu",
+                    start: "top 75%",
+                },
+                y: 100,
+                opacity: 0,
+                rotationY: 15,
+                duration: 1,
+                ease: "back.out(1.2)",
+                delay: i * 0.2
+            });
         });
     </script>
 </body>
