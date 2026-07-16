@@ -4,9 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>shadowdev_x | Premium Web Architect</title>
-    <script type="module" src="https://unpkg.com/@splinetool/viewer@1.12.98/build/spline-viewer.js"></script>
-    <!-- Three.js CDN -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- Three.js ES Modules Import Map -->
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.150.1/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.150.1/examples/jsm/"
+            }
+        }
+    </script>
     
     <!-- GSAP & ScrollTrigger CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
@@ -19,7 +26,7 @@
             theme: {
                 extend: {
                     colors: {
-                        darkBase: '#0a0a0a',
+                        darkBase: '#000000',
                         mint: '#00ffa6',
                         deepViolet: '#5b00ff',
                     }
@@ -44,7 +51,7 @@
 
     <!-- Hero Section -->
     <section class="relative min-h-screen flex items-center justify-center pt-20 px-6 lg:px-20 overflow-hidden bg-black" id="hero-section">
-        <!-- GLOBAL WEBGL CANVAS (Orb -> Galaxy -> Brain) -->
+        <!-- GLOBAL WEBGL CANVAS (Prism Lightning & Indigo Current) -->
         <canvas id="hero-canvas" class="fixed inset-0 w-full h-full z-[-1] pointer-events-none"></canvas>
 
         <div class="relative z-10 flex flex-col items-center text-center mt-12">
@@ -65,7 +72,7 @@
                 SHADOWDEV
             </h1>
             <p class="mt-6 text-mint/70 tracking-[0.5em] font-semibold text-sm uppercase blur-[0.5px] gsap-hero-text">
-                The Living Interface
+                The Clearer Call
             </p>
             <div class="flex gap-4 mt-12 gsap-hero-text pointer-events-auto">
                 <a href="https://fiverr.com/" target="_blank" class="inline-flex items-center justify-center px-8 py-4 text-darkBase bg-mint font-bold rounded-lg btn-neon text-lg" data-tilt data-tilt-scale="1.05" data-tilt-max="10">
@@ -81,10 +88,8 @@
     <!-- NEW SECTION: The Origin Story -->
     <section id="origin" class="py-24 px-6 lg:px-20 relative overflow-hidden">
         <div class="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-            <!-- Column 1: Abstract Glowing Orb -->
+            <!-- Column 1: Blank for background -->
             <div class="flex justify-center items-center gsap-reveal-left">
-                <!-- We removed the static orb because the 3D canvas handles it now, leaving space to let the background shine -->
-                <div class="w-full h-64 border border-mint/20 rounded-full glass opacity-20 pulse-slow"></div>
             </div>
             
             <!-- Column 2: The Copy -->
@@ -248,167 +253,165 @@
         }
     </script>
 
-    <!-- Three.js Morphing Living Interface Logic -->
-    <script>
+    <!-- Three.js Prism Lightning Bolt Logic -->
+    <script type="module">
+        import * as THREE from 'three';
+        import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+        import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+        import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+
         const canvas = document.getElementById('hero-canvas');
         if (canvas) {
-            const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+            const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, powerPreference: "high-performance" });
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.toneMapping = THREE.ReinhardToneMapping;
 
             const scene = new THREE.Scene();
-            const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
-            camera.position.z = 40;
-
-            const count = 12000;
-            const geometry = new THREE.BufferGeometry();
-            const positions = new Float32Array(count * 3);
-            const colors = new Float32Array(count * 3);
             
-            // Arrays to store target shapes
-            const orbPts = [];
-            const galPts = [];
-            const braPts = [];
-            const currentPts = [];
+            const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 100);
+            camera.position.z = 15;
 
-            const colorMint = new THREE.Color(0x00ffa6);
-            const colorViolet = new THREE.Color(0x5b00ff);
+            // --- 1. PRISM LIGHTNING BOLT ---
+            const boltShape = new THREE.Shape();
+            boltShape.moveTo(0, 5);
+            boltShape.lineTo(1, 1);
+            boltShape.lineTo(-1, 0);
+            boltShape.lineTo(1, -4);
+            boltShape.lineTo(-0.5, -0.5);
+            boltShape.lineTo(1, 1.5);
+            boltShape.lineTo(-0.5, 3);
+            boltShape.lineTo(0, 5);
 
-            for (let i = 0; i < count; i++) {
-                // 1. Orb
-                const uOrb = Math.random() * Math.PI;
-                const vOrb = Math.random() * 2 * Math.PI;
-                const rOrb = 12 + Math.random() * 2;
-                orbPts.push(new THREE.Vector3(
-                    rOrb * Math.sin(uOrb) * Math.cos(vOrb),
-                    rOrb * Math.sin(uOrb) * Math.sin(vOrb),
-                    rOrb * Math.cos(uOrb)
-                ));
+            const extrudeSettings = { depth: 0.5, bevelEnabled: true, bevelSegments: 2, steps: 1, bevelSize: 0.1, bevelThickness: 0.1 };
+            const boltGeometry = new THREE.ExtrudeGeometry(boltShape, extrudeSettings);
+            boltGeometry.center();
 
-                // 2. Galaxy
-                const angle = Math.random() * Math.PI * 2;
-                const radius = Math.random() * 45;
-                const spiralAngle = angle + (radius * 0.15);
-                galPts.push(new THREE.Vector3(
-                    Math.cos(spiralAngle) * radius,
-                    (Math.random() - 0.5) * (45 - radius) * 0.1,
-                    Math.sin(spiralAngle) * radius - 10
-                ));
+            const glassMaterial = new THREE.MeshPhysicalMaterial({
+                color: 0xffffff,
+                metalness: 0.1,
+                roughness: 0.05,
+                transmission: 1.0, // Glass refraction
+                ior: 1.5,
+                thickness: 2.0,
+                clearcoat: 1.0,
+                clearcoatRoughness: 0.1,
+                transparent: true
+            });
 
-                // 3. Brain
-                const hemisphere = Math.random() > 0.5 ? 1 : -1;
-                const uBra = Math.random() * Math.PI;
-                const vBra = Math.random() * 2 * Math.PI;
-                let rBra = 16;
-                // Add simulated brain convolutions
-                rBra += Math.sin(uBra * 10) * Math.cos(vBra * 10) * 2;
-                
-                braPts.push(new THREE.Vector3(
-                    (rBra * Math.sin(uBra) * Math.cos(vBra)) + (hemisphere * 9),
-                    (rBra * 0.8) * Math.sin(uBra) * Math.sin(vBra) + 5,
-                    (rBra * 1.2) * Math.cos(uBra)
-                ));
+            const boltMesh = new THREE.Mesh(boltGeometry, glassMaterial);
+            boltMesh.scale.set(1.5, 1.5, 1.5);
+            scene.add(boltMesh);
 
-                // Initialize at orb
-                currentPts.push(orbPts[i].clone());
-                
-                colors[i * 3] = colorMint.r;
-                colors[i * 3 + 1] = colorMint.g;
-                colors[i * 3 + 2] = colorMint.b;
+            // --- 2. INDIGO ANTI-GRAVITY CURRENT ---
+            const particleCount = 8000;
+            const curGeo = new THREE.SphereGeometry(0.04, 8, 8);
+            const curMat = new THREE.MeshBasicMaterial({
+                color: 0x4b0082, // Indigo
+                transparent: true,
+                opacity: 0.6,
+                blending: THREE.AdditiveBlending
+            });
+
+            const currentMesh = new THREE.InstancedMesh(curGeo, curMat, particleCount);
+            scene.add(currentMesh);
+
+            const dummy = new THREE.Object3D();
+            const particlesData = [];
+
+            for (let i = 0; i < particleCount; i++) {
+                particlesData.push({
+                    x: (Math.random() - 0.5) * 30,
+                    y: (Math.random() - 0.5) * 30,
+                    z: (Math.random() - 0.5) * 15 - 5,
+                    speed: 0.02 + Math.random() * 0.03,
+                    wobbleSpeed: Math.random() * 2,
+                    wobbleAmp: Math.random() * 0.5
+                });
             }
 
-            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-            geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+            // --- 3. LIGHTING (Splitting Violet & Amber) ---
+            const ambient = new THREE.AmbientLight(0x0a0a1a, 1.0); // deep dark blue/indigo base
+            scene.add(ambient);
 
-            const material = new THREE.PointsMaterial({
-                size: 0.18,
-                vertexColors: true,
-                transparent: true,
-                opacity: 0.9,
-                blending: THREE.AdditiveBlending,
-                depthWrite: false
-            });
+            // Violet Light (Left)
+            const lightViolet = new THREE.PointLight(0x8a2be2, 15, 30);
+            lightViolet.position.set(-4, 0, 2);
+            scene.add(lightViolet);
 
-            const pointCloud = new THREE.Points(geometry, material);
-            scene.add(pointCloud);
+            // Amber Light (Right)
+            const lightAmber = new THREE.PointLight(0xffbf00, 15, 30);
+            lightAmber.position.set(4, 0, 2);
+            scene.add(lightAmber);
 
-            let mouse = new THREE.Vector2(-999, -999);
+            // --- 4. POST-PROCESSING (Bloom) ---
+            const renderScene = new RenderPass(scene, camera);
+            const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.5, 0.4, 0.85);
+            bloomPass.threshold = 0.1;
+            bloomPass.strength = 1.2;
+            bloomPass.radius = 0.5;
+
+            const composer = new EffectComposer(renderer);
+            composer.addPass(renderScene);
+            composer.addPass(bloomPass);
+
+            // --- INTERACTION & ANIMATION ---
+            let mouseX = 0;
+            let mouseY = 0;
+            let targetRotationX = 0;
+            let targetRotationY = 0;
+
             window.addEventListener('mousemove', (e) => {
-                mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-                mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+                mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+                mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
             });
 
-            const raycaster = new THREE.Raycaster();
-            const plane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
-            const intersectPoint = new THREE.Vector3();
             const clock = new THREE.Clock();
 
             function animate() {
                 requestAnimationFrame(animate);
                 const time = clock.getElapsedTime();
 
-                raycaster.setFromCamera(mouse, camera);
-                raycaster.ray.intersectPlane(plane, intersectPoint);
-
-                // Scroll based morphing logic
-                let scrollY = window.scrollY;
-                let maxScroll = document.body.scrollHeight - window.innerHeight;
-                let progress = Math.min(1, Math.max(0, scrollY / (maxScroll || 1)));
-
-                // Normalize progress to [0,1] for t1 (orb to galaxy) and t2 (galaxy to brain)
-                let t1 = Math.min(1, progress * 2);
-                let t2 = Math.max(0, (progress - 0.5) * 2);
+                // Smoothly tilt bolt toward mouse
+                targetRotationY = mouseX * 0.8;
+                targetRotationX = mouseY * -0.5;
                 
-                pointCloud.rotation.y = time * 0.15; // Slow rotation
+                // Add continuous slow rotation
+                boltMesh.rotation.y += (targetRotationY + time * 0.2 - boltMesh.rotation.y) * 0.05;
+                boltMesh.rotation.x += (targetRotationX - boltMesh.rotation.x) * 0.05;
 
-                const posAttr = geometry.attributes.position.array;
-                const colAttr = geometry.attributes.color.array;
-
-                for (let i = 0; i < count; i++) {
-                    let target = new THREE.Vector3();
-                    if (progress < 0.5) {
-                        target.lerpVectors(orbPts[i], galPts[i], t1);
-                    } else {
-                        target.lerpVectors(galPts[i], braPts[i], t2);
-                    }
-
-                    // Global breathing
-                    let breath = Math.sin(time * 3 + (i % 20)) * 0.4;
-                    target.x += breath * (target.x / 15);
-                    target.y += breath * (target.y / 15);
-                    target.z += breath * (target.z / 15);
-
-                    // Mouse Interaction
-                    let localIntersect = intersectPoint.clone();
-                    pointCloud.worldToLocal(localIntersect);
-                    let dist = localIntersect.distanceTo(target);
+                // Animate Indigo Current
+                for (let i = 0; i < particleCount; i++) {
+                    let p = particlesData[i];
+                    p.y += p.speed; // Anti-gravity drift
                     
-                    if (dist < 10) {
-                        let force = (10 - dist) / 10;
-                        target.x += (target.x - localIntersect.x) * force * 2;
-                        target.y += (target.y - localIntersect.y) * force * 2;
+                    // Reset at top
+                    if (p.y > 15) {
+                        p.y = -15;
+                        p.x = (Math.random() - 0.5) * 30;
                     }
 
-                    // Lerp current position to target for smooth transition
-                    currentPts[i].lerp(target, 0.08);
+                    // Bend current around bolt (Repulsion)
+                    let distToCenter = Math.sqrt(p.x * p.x + p.z * p.z);
+                    let repulseX = p.x;
+                    let repulseZ = p.z;
+                    
+                    if (distToCenter < 3 && p.y > -6 && p.y < 6) {
+                        let force = (3 - distToCenter) / 3;
+                        repulseX += (p.x / distToCenter) * force * 1.5;
+                        repulseZ += (p.z / distToCenter) * force * 1.5;
+                    }
 
-                    posAttr[i * 3] = currentPts[i].x;
-                    posAttr[i * 3 + 1] = currentPts[i].y;
-                    posAttr[i * 3 + 2] = currentPts[i].z;
-
-                    // Interpolate Colors based on progress
-                    let mixFactor = progress + (Math.sin(time + i * 0.1) * 0.3);
-                    mixFactor = Math.max(0, Math.min(1, mixFactor));
-                    let c = colorMint.clone().lerp(colorViolet, mixFactor);
-                    colAttr[i * 3] = c.r;
-                    colAttr[i * 3 + 1] = c.g;
-                    colAttr[i * 3 + 2] = c.b;
+                    // Wobbly viscous motion
+                    let wave = Math.sin(time * p.wobbleSpeed + i) * p.wobbleAmp;
+                    
+                    dummy.position.set(repulseX + wave, p.y, repulseZ);
+                    dummy.updateMatrix();
+                    currentMesh.setMatrixAt(i, dummy.matrix);
                 }
+                currentMesh.instanceMatrix.needsUpdate = true;
 
-                geometry.attributes.position.needsUpdate = true;
-                geometry.attributes.color.needsUpdate = true;
-
-                renderer.render(scene, camera);
+                composer.render();
             }
 
             animate();
@@ -417,6 +420,7 @@
                 camera.aspect = window.innerWidth / window.innerHeight;
                 camera.updateProjectionMatrix();
                 renderer.setSize(window.innerWidth, window.innerHeight);
+                composer.setSize(window.innerWidth, window.innerHeight);
             });
         }
     </script>
