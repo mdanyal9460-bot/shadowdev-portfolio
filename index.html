@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>shadowdev_x | Premium Web Architect</title>
     <script type="module" src="https://unpkg.com/@splinetool/viewer@1.12.98/build/spline-viewer.js"></script>
+    <!-- Three.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     
     <!-- GSAP & ScrollTrigger CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
@@ -41,38 +43,37 @@
     </nav>
 
     <!-- Hero Section -->
-    <section class="relative min-h-screen flex items-center justify-center pt-20 px-6 lg:px-20 overflow-hidden">
-        <!-- Abstract Background Glows -->
-        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-neonBlue/20 rounded-full blur-[120px] pointer-events-none gsap-pulse"></div>
-        <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-neonPurple/20 rounded-full blur-[120px] pointer-events-none gsap-pulse"></div>
+    <section class="relative min-h-screen flex items-center justify-center pt-20 px-6 lg:px-20 overflow-hidden bg-black">
+        <!-- WEBGL CANVAS (Background Particles) -->
+        <canvas id="hero-canvas" class="absolute inset-0 w-full h-full z-0 pointer-events-none"></canvas>
 
-        <div class="container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center z-10">
-            <div class="space-y-8">
-                <!-- 3D Kinetic Text with Vanilla Tilt -->
-                <div class="inline-block" data-tilt data-tilt-max="5" data-tilt-speed="400" data-tilt-perspective="500">
-                    <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight leading-tight text-3d-kinetic gsap-hero-text">
-                        Architecting <br>
-                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-neonBlue to-neonPurple">Premium</span> <br>
-                        Digital Realities.
-                    </h1>
-                </div>
-                <p class="text-lg md:text-xl text-gray-400 max-w-lg gsap-hero-text">
-                    I'm <span class="text-white font-semibold">shadowdev_x</span>. Crafting ultra-modern, high-converting premium landing pages that turn visitors into clients.
-                </p>
-                <div class="flex gap-4 gsap-hero-text">
-                    <a href="https://fiverr.com/" target="_blank" class="inline-flex items-center justify-center px-8 py-4 text-darkBase bg-neonBlue font-bold rounded-lg btn-neon text-lg" data-tilt data-tilt-scale="1.05" data-tilt-max="10">
-                        Hire Me on Fiverr
-                    </a>
-                    <a href="#work" class="inline-flex items-center justify-center px-8 py-4 text-white glass hover:bg-white/5 transition duration-300 rounded-lg font-bold text-lg border border-white/10" data-tilt data-tilt-scale="1.05" data-tilt-max="10">
-                        View Work
-                    </a>
-                </div>
-            </div>
-
-            <!-- 3D Spline Container -->
-            <div class="relative w-full h-[500px] lg:h-[700px] rounded-2xl overflow-hidden glass border border-white/5 shadow-2xl gsap-hero-spline">
-                <spline-viewer url="https://prod.spline.design/mMfxZZ4N-rT9RqH8/scene.splinecode"></spline-viewer>
-                <div class="absolute inset-0 pointer-events-none shadow-[inset_0_0_50px_rgba(10,10,10,0.8)] rounded-2xl"></div>
+        <div class="relative z-10 flex flex-col items-center text-center mt-12">
+            <h1 
+                class="text-6xl md:text-9xl font-black tracking-tighter uppercase gsap-hero-text"
+                style="
+                    color: #050505;
+                    text-shadow: 
+                        0 0 10px rgba(255, 115, 0, 0.5),
+                        0 0 40px rgba(255, 170, 0, 0.8),
+                        0 0 80px rgba(255, 200, 0, 1),
+                        0 0 120px rgba(255, 115, 0, 0.8),
+                        inset 0 0 20px rgba(0, 0, 0, 1);
+                    -webkit-text-stroke: 1px rgba(255, 170, 0, 0.3);
+                "
+                data-tilt data-tilt-max="5" data-tilt-perspective="500"
+            >
+                SHADOWDEV
+            </h1>
+            <p class="mt-6 text-amber-500/70 tracking-[0.5em] font-semibold text-sm uppercase blur-[0.5px] gsap-hero-text">
+                The Core is Alive
+            </p>
+            <div class="flex gap-4 mt-12 gsap-hero-text pointer-events-auto">
+                <a href="https://fiverr.com/" target="_blank" class="inline-flex items-center justify-center px-8 py-4 text-darkBase bg-neonBlue font-bold rounded-lg btn-neon text-lg" data-tilt data-tilt-scale="1.05" data-tilt-max="10">
+                    Hire Me on Fiverr
+                </a>
+                <a href="#work" class="inline-flex items-center justify-center px-8 py-4 text-white glass hover:bg-white/5 transition duration-300 rounded-lg font-bold text-lg border border-white/10" data-tilt data-tilt-scale="1.05" data-tilt-max="10">
+                    View Work
+                </a>
             </div>
         </div>
     </section>
@@ -334,6 +335,92 @@
                     formError.classList.remove('hidden');
                     console.error("Web3Forms Error: ", error);
                 }
+            });
+        }
+    </script>
+
+    <!-- Three.js Anti-Gravity Particles Logic -->
+    <script>
+        const canvas = document.getElementById('hero-canvas');
+        if (canvas) {
+            const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
+            camera.position.z = 20;
+
+            const count = 3000;
+            const geometry = new THREE.SphereGeometry(1, 16, 16);
+            const material = new THREE.MeshStandardMaterial({
+                color: 0xffcc00,
+                emissive: 0xff7300,
+                emissiveIntensity: 3,
+                transparent: true,
+                opacity: 0.8
+            });
+
+            const instancedMesh = new THREE.InstancedMesh(geometry, material, count);
+            scene.add(instancedMesh);
+
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+            scene.add(ambientLight);
+
+            const dummy = new THREE.Object3D();
+            const particlesData = [];
+
+            for (let i = 0; i < count; i++) {
+                particlesData.push({
+                    t: Math.random() * 100,
+                    speed: 0.01 + Math.random() / 50,
+                    x: (Math.random() - 0.5) * 60,
+                    y: -30 - Math.random() * 40,
+                    z: (Math.random() - 0.5) * 40,
+                    xAmp: Math.random() * 3,
+                    zAmp: Math.random() * 3,
+                    sizeBase: 0.02 + Math.random() * 0.08
+                });
+            }
+
+            const clock = new THREE.Clock();
+
+            function animate() {
+                requestAnimationFrame(animate);
+
+                for (let i = 0; i < count; i++) {
+                    const p = particlesData[i];
+                    p.t += p.speed;
+                    p.y += 0.05 + p.speed * 2;
+
+                    if (p.y > 30) {
+                        p.y = -30 - Math.random() * 20;
+                        p.x = (Math.random() - 0.5) * 60;
+                        p.z = (Math.random() - 0.5) * 40;
+                    }
+
+                    const xWave = Math.sin(p.t) * p.xAmp;
+                    const zWave = Math.cos(p.t) * p.zAmp;
+
+                    dummy.position.set(p.x + xWave, p.y, p.z + zWave);
+
+                    const pulse = 1 + Math.sin(p.t * 3) * 0.5;
+                    const scale = p.sizeBase * pulse;
+                    dummy.scale.set(scale, scale, scale);
+
+                    dummy.updateMatrix();
+                    instancedMesh.setMatrixAt(i, dummy.matrix);
+                }
+                instancedMesh.instanceMatrix.needsUpdate = true;
+                renderer.render(scene, camera);
+            }
+
+            animate();
+
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
             });
         }
     </script>
