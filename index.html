@@ -298,8 +298,8 @@
         const particleTexture = new THREE.CanvasTexture(canvas2d);
 
         // --- UNIFIED PARTICLE SYSTEM (THREE.Points) ---
-        const particleCount = 7500;
-        const swarmCount = 1000;
+        const particleCount = 10000;
+        const swarmCount = 2000;
         const normalCount = particleCount - swarmCount;
         
         const geometry = new THREE.BufferGeometry();
@@ -310,17 +310,20 @@
         geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
         const pointsMat = new THREE.PointsMaterial({
-            size: 0.6,
+            size: 1.2,
             sizeAttenuation: true,
             map: particleTexture,
             transparent: true,
-            opacity: 0.1,
+            opacity: 0.3,
+            color: new THREE.Color('#a0f0ff'),
             vertexColors: true,
             blending: THREE.AdditiveBlending,
             depthWrite: false
         });
 
         const particlesMesh = new THREE.Points(geometry, pointsMat);
+        particlesMesh.position.z = -10; // Send far to the background
+        particlesMesh.renderOrder = -10;
         scene.add(particlesMesh);
 
         // State Buffers
@@ -333,12 +336,12 @@
         const prevPositions = new Float32Array(particleCount * 3);
         const meta = [];
 
-        const colA1 = new THREE.Color('#333333'); const colA2 = new THREE.Color('#444444'); 
-        const colB1 = new THREE.Color('#222222'); const colB2 = new THREE.Color('#333333'); 
-        const colC1 = new THREE.Color('#555555'); const colC2 = new THREE.Color('#222222'); 
-        const colD1 = new THREE.Color('#444444'); const colD2 = new THREE.Color('#222222'); 
+        const colA1 = new THREE.Color('#ffffff'); const colA2 = new THREE.Color('#e0f7fa'); 
+        const colB1 = new THREE.Color('#80deea'); const colB2 = new THREE.Color('#4dd0e1'); 
+        const colC1 = new THREE.Color('#26c6da'); const colC2 = new THREE.Color('#00bcd4'); 
+        const colD1 = new THREE.Color('#00acc1'); const colD2 = new THREE.Color('#ffffff'); 
         
-        const shiftColors = [new THREE.Color('#444444'), new THREE.Color('#222222'), new THREE.Color('#333333')];
+        const shiftColors = [new THREE.Color('#ffffff'), new THREE.Color('#80deea'), new THREE.Color('#00bcd4')];
 
         for (let i = 0; i < particleCount; i++) {
             const i3 = i * 3;
