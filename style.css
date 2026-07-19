@@ -12,10 +12,7 @@ body {
     overflow-x: hidden;
 }
 
-/* Base Transition Settings for ultra-smooth fluidity */
-* {
-    transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
-}
+/* Base Transition Settings applied selectively instead of * to prevent GSAP conflicts */
 
 /* The Breathing 3D Hero Text (Option B) */
 .hero-title-3d {
@@ -135,4 +132,16 @@ body {
 .gsap-reveal {
     opacity: 0;
     visibility: hidden;
+}
+
+/* Force Mobile Visibility */
+@media (max-width: 768px) {
+    .gsap-hero-text, .hero-title-3d {
+        display: block !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        z-index: 9999 !important;
+        position: relative !important;
+        text-align: center !important;
+    }
 }

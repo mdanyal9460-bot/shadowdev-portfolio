@@ -55,12 +55,13 @@
         <canvas id="hero-canvas" class="fixed inset-0 w-full h-full z-[-1] pointer-events-none"></canvas>
 
         <div class="relative z-10 flex flex-col items-center text-center mt-12">
-            <h1 
-                class="text-6xl md:text-9xl font-black tracking-tighter uppercase gsap-hero-text hero-title-3d"
-                data-tilt data-tilt-max="10" data-tilt-perspective="500"
-            >
-                SHADOWDEV
-            </h1>
+            <div class="gsap-hero-text">
+                <div data-tilt data-tilt-max="10" data-tilt-perspective="500">
+                    <h1 class="text-6xl md:text-9xl font-black tracking-tighter uppercase hero-title-3d">
+                        SHADOWDEV
+                    </h1>
+                </div>
+            </div>
             <p class="mt-6 text-mint/70 tracking-[0.5em] font-semibold text-sm uppercase blur-[0.5px] gsap-hero-text">
                 The Clearer Call
             </p>
@@ -297,8 +298,8 @@
         const particleTexture = new THREE.CanvasTexture(canvas2d);
 
         // --- UNIFIED PARTICLE SYSTEM (THREE.Points) ---
-        const particleCount = 15000;
-        const swarmCount = 2000;
+        const particleCount = 7500;
+        const swarmCount = 1000;
         const normalCount = particleCount - swarmCount;
         
         const geometry = new THREE.BufferGeometry();
@@ -313,7 +314,7 @@
             sizeAttenuation: true,
             map: particleTexture,
             transparent: true,
-            opacity: 0.9,
+            opacity: 0.1,
             vertexColors: true,
             blending: THREE.AdditiveBlending,
             depthWrite: false
@@ -332,12 +333,12 @@
         const prevPositions = new Float32Array(particleCount * 3);
         const meta = [];
 
-        const colA1 = new THREE.Color('#ff7300'); const colA2 = new THREE.Color('#ffcc00'); 
-        const colB1 = new THREE.Color('#0044ff'); const colB2 = new THREE.Color('#00f3ff'); 
-        const colC1 = new THREE.Color('#00ffa6'); const colC2 = new THREE.Color('#5b00ff'); 
-        const colD1 = new THREE.Color('#4b0082'); const colD2 = new THREE.Color('#310062'); 
+        const colA1 = new THREE.Color('#333333'); const colA2 = new THREE.Color('#444444'); 
+        const colB1 = new THREE.Color('#222222'); const colB2 = new THREE.Color('#333333'); 
+        const colC1 = new THREE.Color('#555555'); const colC2 = new THREE.Color('#222222'); 
+        const colD1 = new THREE.Color('#444444'); const colD2 = new THREE.Color('#222222'); 
         
-        const shiftColors = [new THREE.Color('#ffbf00'), new THREE.Color('#00ffa6'), new THREE.Color('#8a2be2')];
+        const shiftColors = [new THREE.Color('#444444'), new THREE.Color('#222222'), new THREE.Color('#333333')];
 
         for (let i = 0; i < particleCount; i++) {
             const i3 = i * 3;
@@ -380,14 +381,14 @@
             prevPositions[i3] = positions[i3]; prevPositions[i3+1] = positions[i3+1]; prevPositions[i3+2] = positions[i3+2];
 
             meta.push({
-                speed: 0.015 + Math.random() * 0.03,
-                wobbleSpeed: Math.random() * 2,
-                wobbleAmp: Math.random() * 0.5,
+                speed: 0.005 + Math.random() * 0.01,
+                wobbleSpeed: Math.random() * 1,
+                wobbleAmp: Math.random() * 0.2,
                 // Swarm specific
                 swarmOffsetX: (Math.random() - 0.5) * 8,
                 swarmOffsetY: (Math.random() - 0.5) * 8,
                 swarmOffsetZ: (Math.random() - 0.5) * 8,
-                swarmSpeed: 0.02 + Math.random() * 0.08
+                swarmSpeed: 0.01 + Math.random() * 0.04
             });
         }
 
